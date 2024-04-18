@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SeminarHub.Data;
 using SeminarHub.Data.Models;
@@ -9,6 +10,7 @@ using static SeminarHub.Data.Common.DataConstants;
 
 namespace SeminarHub.Controllers
 {
+    [Authorize]
     public class SeminarController : Controller
     {
         private readonly SeminarHubDbContext context;
@@ -43,6 +45,7 @@ namespace SeminarHub.Controllers
             model.Categories = await GetCategories();
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Add(SeminarAddViewModel seminarForm)
         {
@@ -95,6 +98,32 @@ namespace SeminarHub.Controllers
 
             return RedirectToAction(nameof(All));
         }
+
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    var searchedSeminar = await dbContext.Seminars
+        //        .Where(s => s.Id == id)
+        //        .AsNoTracking()
+        //        .Select(s => new SeminarDetailsViewModel()
+        //        {
+        //            Id = s.Id,
+        //            Topic = s.Topic,
+        //            Lecturer = s.Lecturer,
+        //            Category = s.Category.Name,
+        //            DateAndTime = s.DateAndTime.ToString(Data.Common.DataConstants.DateFormat),
+        //            Duration = s.Duration,
+        //            Details = s.Details,
+        //            Organizer = s.Organizer.UserName
+        //        })
+        //        .FirstOrDefaultAsync();
+
+        //    if (searchedSeminar == null)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    return View(searchedSeminar);
+        //}
 
         private string GetUserId()
         {
